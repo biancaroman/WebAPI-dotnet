@@ -1,0 +1,13 @@
+#  arquivos de build e cache
+bin/
+obj/
+
+# configurações de IDE
+*.user
+*.suo
+*.csproj.user
+*.vs/
+
+# outros arquivos de sistema e temporários
+*.DS_Store
+*.log
