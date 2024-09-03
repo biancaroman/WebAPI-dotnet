@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Newtonsoft.Json.Linq;
 using cp_api.Model;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace cp_api.Controllers
 {
@@ -23,6 +25,7 @@ namespace cp_api.Controllers
         /// <returns>Retorna a taxa de câmbio atual do USD para BRL.</returns>
         [HttpGet]
         [SwaggerOperation(Summary = "Recupera a taxa de câmbio atual do USD para BRL.", Description = "Este endpoint retorna a taxa de câmbio atual do Dólar Americano (USD) para o Real Brasileiro (BRL).")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConversionRate))]
         public async Task<JsonResult> GetExchangeRate()
         {
             try
@@ -37,43 +40,12 @@ namespace cp_api.Controllers
  
                     if (exchangeRate.HasValue)
                     {
-                        var valor = new ConversionRate
+                        var result = new ConversionRate
                         {
                             BRL = exchangeRate.Value
                         };
 
-                        var result = new JsonResult(new
-                        {
-                            CurrencyPair = "USD/BRL",
-                            Rate = valor.BRL,
-                            Date = DateTime.Now
-                        });
-
-                        return result;
+                        return new JsonResult(result);
                     }
                     else
-                    {
-                        return new JsonResult(new { Error = "Taxa para BRL não encontrada." });
-                    }
-                }
-                else
-                {
-                    return new JsonResult(new { Error = $"Erro na requisição: {response.StatusCode}" });
-                }
-            }
-            catch (HttpRequestException httpEx)
-            {
-                return new JsonResult(new { Error = $"Erro na comunicação com a API: {httpEx.Message}" });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new { Error = $"Ocorreu um erro inesperado: {ex.Message}" });
-            }
-        }
- 
-        JsonResult IExchangeController.GetExchangeRate()
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+          
