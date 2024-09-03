@@ -48,4 +48,28 @@ namespace cp_api.Controllers
                         return new JsonResult(result);
                     }
                     else
-          
+                    {
+                        return new JsonResult(new { Error = "Taxa para BRL não encontrada." });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new { Error = $"Erro na requisição: {response.StatusCode}" });
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                return new JsonResult(new { Error = $"Erro na comunicação com a API: {httpEx.Message}" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { Error = $"Ocorreu um erro inesperado: {ex.Message}" });
+            }
+        }
+ 
+        JsonResult IExchangeController.GetExchangeRate()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
