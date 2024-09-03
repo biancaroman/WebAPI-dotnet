@@ -47,4 +47,33 @@ namespace cp_api.Controllers
                             CurrencyPair = "USD/BRL",
                             Rate = valor.BRL,
                             Date = DateTime.Now
-                        
+                        });
+
+                        return result;
+                    }
+                    else
+                    {
+                        return new JsonResult(new { Error = "Taxa para BRL não encontrada." });
+                    }
+                }
+                else
+                {
+                    return new JsonResult(new { Error = $"Erro na requisição: {response.StatusCode}" });
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                return new JsonResult(new { Error = $"Erro na comunicação com a API: {httpEx.Message}" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { Error = $"Ocorreu um erro inesperado: {ex.Message}" });
+            }
+        }
+ 
+        JsonResult IExchangeController.GetExchangeRate()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
